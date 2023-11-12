@@ -1,0 +1,122 @@
+package com.app.navi;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.app.navi.api.latilongtiAPI;
+import com.app.navi.api.stationApi;
+import com.app.navi.api.ticketAPI;
+import com.app.navi.api.walkApi;
+import com.app.navi.dto.LatitudeLongitude;
+import com.app.navi.dto.StationInfo;
+import com.app.navi.dto.TicketInfo;
+import com.app.navi.dto.WalkInfo;
+import com.app.navi.editor.DataEditor;
+import com.app.navi.editor.JsonEditor;
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller
+public class ApiController {
+
+	@Autowired
+	latilongtiAPI latilongapi;
+	@Autowired
+	stationApi stationApi;
+	@Autowired
+	walkApi walkapi;
+	@Autowired
+	ticketAPI ticketapi;
+	@Autowired
+	JsonEditor jsonEditor;
+	@Autowired
+	DataEditor dataEditor;
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home(Locale locale, Model model) {
+
+		return "home";
+	}
+
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String Send(@RequestParam String departure, Model model) {
+
+		Double longitude = 0.0;
+		Double latitude = 0.0;
+		
+		try {
+			
+			// 軽度緯度情報取得
+			String latilongInfo = latilongapi.sendURL(departure); 
+			
+			// 軽度緯度情報を加工
+			ArrayList<LatitudeLongitude> list = jsonEditor.editJsonData(latilongInfo, "geometry", "coordinates");
+			
+			if(!list.isEmpty()) {
+			
+				// 軽度緯度を取得
+				longitude = list.get(0).getLongitude();
+				latitude = list.get(0).getLatitude();
+				// 駅情報を取得
+				String stationInfo = stationApi.sendURL(longitude, latitude);
+	
+				if(!stationInfo.isEmpty()) {
+				
+					// 駅情報を加工
+					ArrayList<StationInfo> Info =jsonEditor.editJsonData1(stationInfo);
+					
+					System.out.println(Info);
+					
+					if(!Info.isEmpty()) {
+						// 駅情報取得(駅名、距離)
+						StationInfo info = dataEditor.shortDistance(Info);
+						// 最寄り駅眼名を取得
+						String stationName = info.getStationName();
+					    // 徒歩情報取得
+						String walkInfo = walkapi.sendURL(departure, stationName);
+						// 徒歩情報を加工
+						if(!walkInfo.isEmpty()) {
+						ArrayList<WalkInfo> walkinfo = jsonEditor.editJsonData2(walkInfo);
+						ArrayList<TicketInfo> ticketInfo = ticketapi.sendURL(departure);
+						TicketInfo dto = ticketInfo.get(0);
+						String warkTime = walkinfo.get(0).getWalkTime();
+						String walkDistance = walkinfo.get(0).getWalkDistance();
+						String distance = dto.getDistance();
+						String stations = dto.getStations();
+						String via = dto.getVia();
+						String fare = dto.getFare();
+						String time = dto.getTime();
+						
+						model.addAttribute("stationName", stationName);
+						model.addAttribute("walkTime", warkTime);
+						model.addAttribute("walkDistance", walkDistance);
+						model.addAttribute("distance", distance);
+						model.addAttribute("stations", stations);
+						model.addAttribute("via", via);
+						model.addAttribute("fare", fare);
+						model.addAttribute("time", time);
+						
+
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "home";
+	}
+	
+
+
+}

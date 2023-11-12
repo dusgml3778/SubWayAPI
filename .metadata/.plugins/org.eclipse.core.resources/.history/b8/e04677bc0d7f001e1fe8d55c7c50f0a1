@@ -1,0 +1,21 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false"  pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Home</title>
+</head>
+<body>
+<h1>
+	Navi  
+</h1>
+	
+	<form action="search" method = "post">
+	<input type = "text" name = "departure"><br>
+	<input type="submit" value ="Send">
+	</form>
+
+	가장 가까운 역까지 도보시간 : ${walkTime}<br>
+	가장 가까운 역까지 도보거리 : ${walkDistance}<br>
+
+</body>
+</html>

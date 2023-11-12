@@ -1,0 +1,78 @@
+package com.app.navi.api;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import com.app.navi.dto.TicketInfo;
+
+public class TicketAPI {
+
+	public ArrayList<TicketInfo> sendURL(String departure) {
+
+		ArrayList<TicketInfo> list = new ArrayList<TicketInfo>();
+		
+		try {
+			// Yahoo 乗車ホームページ
+			String URL = "https://transit.yahoo.co.jp/search/result?from=" + departure + "&to=東京&fromgid=&togid";
+			Connection conn = Jsoup.connect(URL);
+
+			Document document = conn.get();
+			// 距離Elements
+			Elements distanceEl = document.select("div#srline li.distance");
+			// 乗り換え駅Elements
+			Elements transferEl = document.select("div#srline li.transfer");
+			// 定期券Elements
+			Elements fareEl = document.select("div.detail.commuterPass dd ul li");
+
+			// 定期券取得
+			ArrayList<String> fareList = new ArrayList<String>();
+			int count = 0;
+			StringBuffer buffer0 = new StringBuffer();
+			for (int i = 0; i < fareEl.size(); i++) {
+				buffer0.append(fareEl.get(i).text());
+				count++;
+				if (count == 3) {
+					fareList.add(buffer0.toString());
+					count = 0;
+					buffer0.setLength(0);
+				}
+			}
+
+			Elements stationName = document.select("div#srline");
+
+			for (int i = 0; i < distanceEl.size(); i++) {
+				System.out.println();
+			}
+
+			for (int i = 1; i <= distanceEl.size(); i++) {
+				Element el = stationName.get(0).getElementById("route0" + i);
+				Elements el1 = el.getElementsByTag("dt");
+				Elements elle = el1.select("a");
+				Elements timeEl = el.select("ul.summary li.time");
+				StringBuffer buffer1 = new StringBuffer();
+				for (int j = 0; j < elle.size(); j++) {
+					buffer1.append(elle.get(j).text());
+					buffer1.append(",");
+				}
+				String distance = distanceEl.get(i - 1).text();
+				String time = timeEl.get(0).text();
+				String stations = buffer1.toString().substring(0, buffer1.toString().length() - 1);
+				String transfer = transferEl.get(i-1).text();
+				String fare = fareList.get(i - 1);
+				
+				list.add(new TicketInfo(distance, stations, transfer, fare, time));
+			}
+
+		} catch (IOException e) {
+
+		}
+
+		return list;
+	}
+}

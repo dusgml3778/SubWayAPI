@@ -1,0 +1,113 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false" pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>定期券</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Diphylleia&family=Dongle:wght@300&family=Gaegu:wght@300;700&family=Orbit&display=swap" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<style type="text/css">
+ body,div,h1,form,table,tr,td,th {
+ font-family:"Diphylleia" !important;
+ }
+ .search {
+ 	position:absolute;
+ 	right:40%;
+ }
+ 
+#btn-search {
+	position:absolute;
+ 	right:43%;
+ 	top:14%;
+}
+#btn-reset {
+	position:absolute;
+ 	right:38%;
+ 	top:14%;
+}
+#count {
+
+	top:20%;
+}
+
+</style>
+</head>
+<body>
+	<h1>SI병신</h1>
+	<div>
+	    <div class="search-title">検索条件</div>
+		<form action="search" method="post">
+		<div class ="search">
+	     出発地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;到着地
+	     <br><input type="text" name="departure" style="width: 450px"> 
+	     ----<img alt="" src="resources/image/train.png" width="20">----
+	     <input type="text" name="destination" style="width: 450px"><br>
+	     </div>
+	     <br>
+	     <button type="submit" class="btn btn-primary" id="btn-search">検索</button>
+	     <button type="submit" class="btn btn-light" id="btn-reset">リセット</button>
+		</form>
+	</div><br>
+	<div>
+    検索結果 ${count}件
+	</div>
+    <br>
+	<table class="table table-striped ">
+	    <colgroup>
+            <col width=2%>
+            <col width=4%>
+            <col width=4%>
+            <col width=5%>             
+            <col width=7%>
+            <col width=5%>
+            <col width=10%>
+            <col width=8%>
+            <col width=4%>
+            <col width=5%>
+            <col width=4%>
+            <col width=4%>
+        </colgroup>
+        
+		<tbody>
+			<c:forEach items="${screenInfo}" var="item" varStatus="status">
+				<tr class="table-active">
+				    <td class = "text-center" style = "width:10%; height:240px;" id ="count">${status.count}</td>
+				    <td class = "text-left" style = "width:70%; height:240px">
+				    <table class="table">
+				    <tbody>
+				    <tr>
+				    <td>
+				    所要時間	:<c:out value="${item.time}" />分&nbsp;&nbsp;&nbsp;乗換回数:<c:out value="${item.via}" />&nbsp;&nbsp;&nbsp;総距離:<c:out value="${item.distance}" />
+				    </td>   
+				    </tr>
+				    <tr>
+				    <td>
+				    出発地
+				     <img alt="" src="resources/image/yazirusi.png" width="20">
+				     <img alt="" src="resources/image/walk.png" width="20">徒歩 : <c:out value="${item.startWalkTime}" />分 <c:out value="${item.startWalkDistance}" />
+				     <img alt="" src="resources/image/yazirusi.png" width="20"><c:out value="${item.stations}" />
+				     <img alt="" src="resources/image/yazirusi.png" width="20">
+				     <img alt="" src="resources/image/walk.png" width="20">徒歩 : <c:out value="${item.endWalkTime}" />分 <c:out value="${item.endWalkDistance}" />
+				     <img alt="" src="resources/image/yazirusi.png" width="20">
+				    到着地
+				    </td>
+				    </tr>
+				    </tbody>
+				    </table>				    
+				    </td>
+				    <td class = "text-center" style = "width:20%; height:240px"><c:out value="${item.fare}" /></td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+</body>
+</html>

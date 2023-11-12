@@ -1,0 +1,6 @@
+package com.app.navi.dto;
+
+public class SearchKeyword {
+	private String x;
+	private String y;
+}

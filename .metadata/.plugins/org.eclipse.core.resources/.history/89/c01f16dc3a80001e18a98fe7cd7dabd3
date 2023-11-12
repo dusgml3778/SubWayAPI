@@ -1,0 +1,79 @@
+package com.app.navi.api;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import com.app.navi.dto.TicketInfo;
+
+public class tsest {
+
+	public static void main(String[] args) throws IOException {
+		try {
+			String URL = "https://transit.yahoo.co.jp/search/result?from=学芸大学&to=上野&fromgid=&togid";
+			Connection conn = Jsoup.connect(URL);
+			
+			Document document = conn.get();
+			Elements distance = document.select("div#srline li.distance");
+			Elements transfer = document.select("div#srline li.transfer");
+			Elements fare = document.select("div.detail.commuterPass dd ul li");		
+		    Elements stationName = document.select("div#srline");
+		    ArrayList<TicketInfo> list = new ArrayList<TicketInfo>();
+		    ArrayList<String> distanceList = new ArrayList<String>();
+		    StringBuffer sbs = new StringBuffer();
+		    int start = 0;
+		    for(int i =0;i<distance.size();i++) {
+		    	for(start = 0;start<fare.size()/distance.size();start++) {
+		    			sbs.append(fare.get(start));
+		    	}
+		    	distanceList.add(sbs.toString()); 	
+		    }
+		    
+		    for(int i =1;i<= distance.size();i++) {
+		    	Element el = stationName.get(0).getElementById("route0"+i);
+		    	Elements el1 = el.getElementsByTag("dt");
+		    	Elements timeEl = el.getElementsByClass("time");
+		    	Elements elle = el1.select("a");
+		    	StringBuffer sb = new StringBuffer();
+		    	for(int j = 0; j<elle.size();j++) {
+		    		sb.append(elle.get(j).text());
+		    		sb.append(",");
+		    	}
+		    	
+		    	String stations = sb.toString().substring(0, sb.toString().length()-1);
+		    	
+	    		list.add(new TicketInfo(distance.get(i-1).text(), stations, transfer.get(i-1).text(), fare.get(i-1).text()));
+		    }
+			
+			
+			 for(TicketInfo str: list) { System.out.println(str); }
+			 
+				/*
+				 * for(Element el: fare) { System.out.println(el.text()); }
+				 */
+		    /*
+			for(Element el: fare) {
+				System.out.println(el.text());
+			}
+			for(Element el: transfer) {
+				System.out.println(el.text());
+			}
+			for(Element el: distance) {
+				System.out.println(el.text());
+			}
+			
+			ArrayList<String> list = new ArrayList<String>();
+*/
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		}
+	}
+
+}

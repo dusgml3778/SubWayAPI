@@ -1,0 +1,25 @@
+package com.app.navi.dto;
+
+public class StationInfo {
+
+	private String stationName = "";
+	private int distance = 0;
+	
+	public String getStationName() {
+		return stationName;
+	}
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+	public int getDistance() {
+		return distance;
+	}
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+	public StationInfo(String stationName, int distance) {
+		super();
+		this.stationName = stationName;
+		this.distance = distance;
+	}
+}

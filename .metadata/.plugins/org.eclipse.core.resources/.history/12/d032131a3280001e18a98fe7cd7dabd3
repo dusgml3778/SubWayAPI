@@ -1,0 +1,5 @@
+package com.app.navi.dto;
+
+public class TicketInfo {
+
+}

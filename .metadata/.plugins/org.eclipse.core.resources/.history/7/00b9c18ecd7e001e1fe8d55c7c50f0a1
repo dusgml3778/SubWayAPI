@@ -1,0 +1,22 @@
+package com.app.navi.editor;
+
+import java.util.HashMap;
+
+import org.json.simple.JSONArray;
+import org.springframework.stereotype.Service;
+
+@Service
+public class DataEditor {
+
+	public void shortDistance (JSONArray arr) {
+		
+		for(int i = 0;i<arr.size();i++) {
+		 HashMap<String, String> map = (HashMap<String, String>) arr.get(i);
+		 		System.out.println(map.get("distance"));
+		}
+		
+		
+	}
+	
+	
+}

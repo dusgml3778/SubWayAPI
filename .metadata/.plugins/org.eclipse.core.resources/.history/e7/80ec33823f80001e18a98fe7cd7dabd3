@@ -1,0 +1,41 @@
+package com.app.navi.dto;
+
+public class TicketInfo {
+
+	private String distance = "";
+	private String stations = "";
+	private String via = "";
+	private String fare = "";
+	
+	public TicketInfo(String distance, String stations, String time, String fare) {
+		super();
+		this.distance = distance;
+		this.stations = stations;
+		this.via = time;
+		this.fare = fare;
+	}
+	public String getDistance() {
+		return distance;
+	}
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+	public String getStations() {
+		return stations;
+	}
+	public void setStations(String stations) {
+		this.stations = stations;
+	}
+	public String getVia() {
+		return via;
+	}
+	public void setVia(String via) {
+		this.via = via;
+	}
+	public String getFare() {
+		return fare;
+	}
+	public void setFare(String fare) {
+		this.fare = fare;
+	}
+}

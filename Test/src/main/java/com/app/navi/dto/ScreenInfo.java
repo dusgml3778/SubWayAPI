@@ -1,0 +1,118 @@
+package com.app.navi.dto;
+
+public class ScreenInfo {
+	//出発駅
+	private String startStation;
+	//出発駅まで徒歩時間
+	private String startWalkTime;
+	//出発駅まで距離
+	private String startWalkDistance;
+	//到着駅
+	private String endStation;
+	//到着駅まで徒歩時間
+	private String endWalkTime;
+	//到着駅まで距離
+	private String endWalkDistance;
+	//総距離
+	private String distance;
+	//駅	
+	private String stations;
+	//乗り換え数
+	private String via;
+	//定期券
+	private String fare;
+	//全体の時間
+	private String time;
+	//片道
+	private String oneWayFare;
+	
+	public ScreenInfo(String startStation, String startWalkTime, String startWalkDistance, String endStation,
+			String endWalkTime, String endWalkDistance, String distance, String stations, String via, String fare,
+			String time, String oneWayFare) {
+		super();
+		this.startStation = startStation;
+		this.startWalkTime = startWalkTime;
+		this.startWalkDistance = startWalkDistance;
+		this.endStation = endStation;
+		this.endWalkTime = endWalkTime;
+		this.endWalkDistance = endWalkDistance;
+		this.distance = distance;
+		this.stations = stations;
+		this.via = via;
+		this.fare = fare;
+		this.time = time;
+		this.oneWayFare = oneWayFare;
+	}
+	public String getStartStation() {
+		return startStation;
+	}
+	public void setStartStation(String startStation) {
+		this.startStation = startStation;
+	}
+	public String getStartWalkTime() {
+		return startWalkTime;
+	}
+	public void setStartWalkTime(String startWalkTime) {
+		this.startWalkTime = startWalkTime;
+	}
+	public String getStartWalkDistance() {
+		return startWalkDistance;
+	}
+	public void setStartWalkDistance(String startWalkDistance) {
+		this.startWalkDistance = startWalkDistance;
+	}
+	public String getEndStation() {
+		return endStation;
+	}
+	public void setEndStation(String endStation) {
+		this.endStation = endStation;
+	}
+	public String getEndWalkTime() {
+		return endWalkTime;
+	}
+	public void setEndWalkTime(String endWalkTime) {
+		this.endWalkTime = endWalkTime;
+	}
+	public String getEndWalkDistance() {
+		return endWalkDistance;
+	}
+	public void setEndWalkDistance(String endWalkDistance) {
+		this.endWalkDistance = endWalkDistance;
+	}
+	public String getDistance() {
+		return distance;
+	}
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+	public String getStations() {
+		return stations;
+	}
+	public void setStations(String stations) {
+		this.stations = stations;
+	}
+	public String getVia() {
+		return via;
+	}
+	public void setVia(String via) {
+		this.via = via;
+	}
+	public String getFare() {
+		return fare;
+	}
+	public void setFare(String fare) {
+		this.fare = fare;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public String getOneWayFare() {
+		return oneWayFare;
+	}
+	public void setOneWayFare(String oneWayFare) {
+		this.oneWayFare = oneWayFare;
+	}
+}

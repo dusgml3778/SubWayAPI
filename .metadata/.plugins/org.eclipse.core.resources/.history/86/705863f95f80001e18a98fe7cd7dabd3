@@ -1,0 +1,88 @@
+package com.app.navi.editor;
+
+import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Service;
+
+import com.app.navi.dto.LatitudeLongitude;
+import com.app.navi.dto.StationInfo;
+import com.app.navi.dto.WalkInfo;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class JsonEditor {
+
+	public ArrayList<LatitudeLongitude> editJsonData(String target, String jsonData, String key1, String key2) throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		Double longitude = 0.0;
+		Double latitude = 0.0;
+		jsonData = jsonData.substring(1, jsonData.length() - 1);
+		ArrayList<LatitudeLongitude> list = new ArrayList<LatitudeLongitude>();
+		
+		int size = objectMapper.readTree(jsonData).at("/geometry").size();
+		String str = objectMapper.readTree(jsonData).at("0/geometry").asText();
+	    // JsonNode 생성 (readValue)        
+		//JsonNode jsonNode = objectMapper.readTree(jsonData).at("/geometry").get(1);
+		//String studentName1 = jsonNode.path("properties").path("addressCode").asText();
+		
+		if (!jsonData.isEmpty()) {
+			String addressCode = objectMapper.readTree(jsonData).at("/properties/addressCode").asText();
+			String title = objectMapper.readTree(jsonData).at("/properties/title").asText();
+
+			if (!addressCode.isEmpty() && target.equals(title)) {
+				// 軽度
+				String longi = objectMapper.readTree(jsonData).at("/geometry/coordinates/0").asText();
+				// 緯度
+				String lati = objectMapper.readTree(jsonData).at("/geometry/coordinates/1").asText();
+				longitude = Double.parseDouble(longi);
+				latitude = Double.parseDouble(lati);
+				list.add(new LatitudeLongitude(longitude, latitude));
+			}
+
+		}
+		return list;
+	}
+
+	public ArrayList<StationInfo> editJsonData1(String jsonData) throws Exception {
+
+		ArrayList<StationInfo> info = new ArrayList<StationInfo>();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		// 駅情報取得
+		int length = objectMapper.readTree(jsonData).findPath("station").size();
+		JsonNode jsonNode = objectMapper.readTree(jsonData);
+		String stationName = "";
+		String distance = "";
+		String path = "";
+		String path1 = "";
+		for (int i = 0; i < length; i++) {
+			path = "/response/station/" + i + "/name";
+			path1 = "/response/station/" + i + "/distance";
+			stationName = jsonNode.at(path).asText();
+			distance = jsonNode.at(path1).asText();
+			info.add(new StationInfo(stationName, distance));
+		}
+
+		return info;
+	}
+
+	public ArrayList<WalkInfo> editJsonData2(String jsonData) throws Exception {
+
+		ArrayList<WalkInfo> info = new ArrayList<WalkInfo>();
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		JsonNode jsonNode = objectMapper.readTree(jsonData);
+		String walkTime = jsonNode.at("/routes/0/legs/0/duration/text").asText();
+		String walkDistance = jsonNode.at("/routes/0/legs/0/distance/text").asText();
+
+		info.add(new WalkInfo(walkTime, walkDistance));
+
+		return info;
+	}
+}
